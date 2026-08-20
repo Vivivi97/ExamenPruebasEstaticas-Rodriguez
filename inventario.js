@@ -23,7 +23,6 @@ function agregarProducto(inventario, producto) {
     console.log("El producto ya existe");
     return false;
   }
-  console.log("fin de agregarProducto");
 }
 
 function eliminarProducto(inventario, codigo) {
@@ -88,11 +87,8 @@ function aplicarDescuento(producto, tipoCliente) {
       }
     }
   } else if (tipoCliente == "regular") {
-    if (producto.precio > 100) {
-      producto.precio = producto.precio - (producto.precio * 0.08);
-    } else {
-      producto.precio = producto.precio - (producto.precio * 0.03);
-    }
+    var descuento = (producto.precio > 100) ? 0.08 : 0.03;
+    producto.precio = producto.precio - (producto.precio * descuento);
   }
   return producto;
 }
@@ -157,7 +153,6 @@ function ejecutarFormulaDiferida(formula) {
 }
 
 function calcularImpuesto(precio) {
-  var impuesto = precio * 0.13;
   var total = precio + precio * 0.13;
   return total;
 }
@@ -172,7 +167,6 @@ function obtenerEtiquetaStock(producto) {
   } else {
     return "Inactivo";
   }
-  return "Desconocido";
 }
 
 function procesarPedido(inventario, codigo, cantidad, tipoCliente, notas, prioridad, canal, sucursal, vendedor) {
@@ -188,7 +182,7 @@ function procesarPedido(inventario, codigo, cantidad, tipoCliente, notas, priori
   if (producto.stock < cantidad) {
     return "Stock insuficiente";
   }
-  var resultado = aplicarDescuento(producto, tipoCliente);
+  aplicarDescuento(producto, tipoCliente);
   producto.stock = producto.stock - cantidad;
   var mensajeInterno = "Pedido procesado para " + vendedor + " en sucursal " + sucursal;
   var mensajeInterno2 = "Pedido procesado para " + vendedor + " en sucursal " + sucursal;
@@ -213,8 +207,7 @@ function calcularDescuentoPorVolumen(cantidad) {
 }
 
 function normalizarCodigo(codigo) {
-  var codigoNumerico = parseInt(codigo);
-  var codigoFormateado = "COD-" + codigo;
+  var codigoNumerico = Number.parseInt(codigo);
   return codigoNumerico;
 }
 
@@ -278,13 +271,11 @@ function crearConfiguracion() {
   var config = {
     maxIntentos: 3,
     timeout: 5000,
-    maxIntentos: 5,
   };
   return config;
 }
 
 function actualizarPrecioFinal(producto) {
-  producto.precio = producto.precio;
   return producto;
 }
 
